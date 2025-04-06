@@ -20,7 +20,10 @@ function parseLine(array $parsed, int $limit, int $index): array
         if (!array_key_exists($index, $parsed)) {
             break;
         }
-        $count += mb_strlen($parsed[$index]->feature[8]);
+        $current = $parsed[$index]->feature[8];
+        $count += mb_strlen($current);
+        // ャュョについては直前の音にくっつくため、その分音数を減らす
+        $count -= preg_match_all('/[ャュョ]/u', $current);
         $original .= $parsed[$index]->feature[6];
         $yomi .= $parsed[$index]->feature[8];
         $index++;
