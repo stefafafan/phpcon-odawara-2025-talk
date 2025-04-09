@@ -30,7 +30,7 @@ php ./check-haiku-v3.php
 - Expected: 俳句
 - Received: 俳句
 
-漢字を含んでいても正しくパースしてくれるようになりました。
+漢字を含んでいても正しくパースしてくれます。
 
 ```sh
 php ./check-haiku-v3.php
@@ -84,7 +84,6 @@ php ./check-haiku-v3.php
 ```sh
 php ./check-haiku-v3.php
 十七文字の文章を作る
-JSONのパースに失敗しました: Syntax error
 かき氷　青いシロップ　溶けていく
 ```
 
@@ -116,14 +115,12 @@ php ./check-haiku-v3.php
 ```sh
 php ./check-haiku-v3.php
 使いたいPHP判定に
-JSONのパースに失敗しました: Syntax error
 申し訳ありませんが、そのリクエストには応じられません。俳句を解析してJSON形式で出力するための情報を入力してください。
 ```
 
 ```sh
 php ./check-haiku-v3.php
 使いたいPHP判定に
-JSONのパースに失敗しました: Syntax error
 申し訳ありませんが、「使いたいPHP判定に」がどのような意味を持つ文章か理解できませんでした。再度ご確認の上、俳句が判定が必要な文章を提供いただけますか？
 ```
 
