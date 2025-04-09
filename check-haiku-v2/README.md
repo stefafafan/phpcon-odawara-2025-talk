@@ -1,13 +1,16 @@
 # check-haiku-v2
 
-ここでは形態素解析を活用して、俳句の判定を実装しています。
+ここでは形態素解析を活用して、俳句の判定を実装しています。[check-haiku-v1](https://github.com/stefafafan/phpcon-odawara-2025-talk/tree/main/check-haiku-v1)では以下のケースに対応できていなかったですが、形態素解析をすることによってそれぞれ対応できるようになっています。
 
-## 形態素解析のために検討したライブラリ・API
+- 漢字の読みを理解する
+- 文章の自然な切れ目を理解する
 
-php-mecab, igo-php, Yahoo日本語形態素解析API, RakutenMA API, Google Cloud Natural Language APIなどを検討しましたが、
-ローカルで動く上にセットアップが楽そうな igo-php (厳密にはフォークの https://github.com/logue/igo-php )を採用しています。
+また、単純な文字数カウントではなく音数を判定するために、「ャュョ」が含まれる場合に全体の文字数からマイナスするようにしています。例えば、
+- 「集中」: ひらがなに起こすと6文字だが、「ゅ」が2回入ってるため「しゅ」「う」「ちゅ」「う」の4音として判定
 
-## 辞書データのセットアップ
+## 事前準備
+
+あらかじめ `ipadic` 配下に辞書データが生成されていることを前提としています。以下の手順で辞書データを生成してください。
 
 1. https://github.com/sile/igo/releases/tag/0.4.5 から本体のソースコードをダウンロードします。
 2. ディレクトリ移動しておきます。 i.e. `cd /path/to/igo` 
@@ -15,3 +18,111 @@ php-mecab, igo-php, Yahoo日本語形態素解析API, RakutenMA API, Google Clou
 4. `ant` を実行し、ソースコードをビルドします。 `igo-0.4.5.jar` ができます。
 5. `java -cp /path/to/igo-0.4.5.jar net.reduls.igo.bin.BuildDic ipadic /path/to/mecab-ipadic-2.7.0-20070801 EUC-JP` のようなコマンドを実行し、 `ipadic` ディレクトリに辞書データを生成します。
 
+> [!TIP]
+> ファイルは古い記事などでは igo-0.4.5.jar をダウンロードする案内になっていますが、2025年4月現在リンク切れしていたため、GitHubから落としてきたソースコードからビルドしています。
+
+### ちなみに: 形態素解析のために検討したライブラリ・API
+
+以下のような手段も検討しました。
+
+- [php-mecab](https://github.com/rsky/php-mecab)
+- [Yahoo!日本語形態素解析API](https://developer.yahoo.co.jp/webapi/jlp/ma/v2/parse.html)
+- [RakutenMA API](https://www.apibank.jp/ApiBank/api/detail?api_no=1028&api_type=I)
+- [Google Cloud Natural Language API](https://cloud.google.com/natural-language)
+
+どれでもよかったですが、今回はローカルで動いて上にセットアップが楽そうな igo-php (厳密にはフォークの https://github.com/logue/igo-php )を採用しています。フォークのほうはcomposerに対応しています。
+
+## 実行方法
+
+以下のように実行してください。
+
+```sh
+php ./check-haiku-v2.php
+```
+
+標準入力から文字列を受け取るので試したい文字列を渡してください。
+
+## 試した結果
+
+### :o: 小田原でみんなで一句詠みたいな
+
+- Expected: 俳句
+- Received: 俳句
+
+漢字を含んでいても正しくパースしてくれるようになりました。
+
+```sh
+小田原でみんなで一句詠みたいな
+上五: 小田原で (読み: オダワラデ) (5音)
+中七: みんなで一句 (読み: ミンナデイック) (7音)
+下五: 詠みたいな (読み: ヨミタイナ) (5音)
+合計: 17音
+
+これは俳句です。
+```
+
+### :o: おだわらでみんなでいっくよみたいな
+
+- Expected: 俳句
+- Received: 俳句
+
+ひらがなでも問題ありません。
+
+```sh
+おだわらでみんなでいっくよみたいな
+上五: おだわらで (読み: オダワラデ) (5音)
+中七: みんなでいっく (読み: ミンナデイック) (7音)
+下五: よみたいな (読み: ヨミタイナ) (5音)
+合計: 17音
+
+これは俳句です。
+```
+
+### :o: 十七文字の文章を作る
+
+- Expected: Not 俳句
+- Received: Not 俳句
+
+17文字であってもちゃんと15音と判定している。
+
+```sh
+php ./check-haiku-v2.php
+十七文字の文章を作る
+上五: 十七文字 (読み: ジューシチモジ) (6音)
+中七: の文章を作る (読み: ノブンショーヲツクル) (9音)
+下五:  (読み: ) (0音)
+合計: 15音
+
+これは俳句ではありません。
+```
+
+### :o: 文字数的に合っててもダメだよね
+
+- Expected: Not 俳句
+- Received: Not 俳句
+
+文章の切れ目を理解した上で5-7-5になっていないことを判定できている。
+
+```sh
+php ./check-haiku-v2.php
+文字数的に合っててもダメだよね
+上五: 文字数的 (読み: モジスーテキ) (6音)
+中七: に合っててもダメ (読み: ニアッテテモダメ) (8音)
+下五: だよね (読み: ダヨネ) (3音)
+合計: 17音
+
+これは俳句ではありません。
+```
+
+### :x: 使いたいPHP判定に
+
+- Expected: 俳句
+- Received: Crash
+
+「PHP」という単語の発音を取得できず、クラッシュしてしまいました。
+
+```sh
+php ./check-haiku-v2.php
+使いたいPHPを判定に
+PHP Warning:  Undefined array key 8 in /Users/stefafafan/ghq/github.com/stefafafan/phpcon-odawara-2025-talk/check-haiku-v2/check-haiku-v2.php on line 23
+```
