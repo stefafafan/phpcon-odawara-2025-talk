@@ -55,7 +55,7 @@ PHP Warning:  Undefined array key 8 in /Users/stefafafan/ghq/github.com/stefafaf
 ## 3. OpenAI の API を利用した俳句の判定
 
 AIに対して具体的なプロンプトを渡すことで、一定の精度で俳句の判定をしてくれます。
-しかしリクエストのたびにお金がかかるのと、入力次第では確率的に意図と違うレスポンスを返すことがあります。
+しかしリクエストのたびにお金がかかるのと、入力次第では確率的に違うレスポンスを返すことがあります。
 
 ```sh
 $ cd check-haiku-v3
@@ -74,9 +74,8 @@ $ php ./check-haiku-v3.php
 $ cd check-haiku-v3
 $ export OPENAI_API_KEY=<あなたのAPIキー>
 $ php ./check-haiku-v3.php
-使いたいPHP判定に
-JSONのパースに失敗しました: Syntax error
-申し訳ありませんが、「使いたいPHP判定に」がどのような意味を持つ文章か理解できませんでした。再度ご確認の上、俳句が判定が必要な文章を提供いただけますか？
+十七文字の文章を作る
+申し訳ありませんが、そのリクエストにはお応えできません。俳句かどうかを判定するための文章を提供してください。
 ```
 
 詳しくは [check-haiku-v3のREADME](./check-haiku-v3/README.md)をご覧ください。
