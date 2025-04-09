@@ -15,7 +15,7 @@ $instructions = <<<EOT
 以下のプロセスを踏んでください。
 - 文章を形態素ごとに分割
 - 形態素ごとにモーラ数を数えて、上五・中七・下五にわける
-- 「っ」や「ー」などはそのまま1モーラとしてカウントして大丈夫です。例えば「切手」は3モーラです
+- 「っ」や「ー」などはそのまま1モーラとしてカウントして大丈夫です。例えば「切手」は3モーラです。読みも「キッテ」となります。
 - 「ャ」「ゅ」「ョ」は直前の文字と合わせて1モーラとしてカウントしてください。
 
 返答はJSON形式で返してください。JSON以外の文章は要りません。
@@ -46,6 +46,8 @@ JSONの中身は以下の形にしてください。
     "total_count": 17,
     "is_haiku": true
 }
+
+Markdown の ```json``` のようなものも不要です。
 EOT;
 
 function isHaiku(mixed $json): bool
@@ -81,6 +83,7 @@ $json_string = $response->choices[0]->message->content;
 $json = json_decode($json_string, true);
 if (json_last_error() !== JSON_ERROR_NONE) {
     echo "JSONのパースに失敗しました: " . json_last_error_msg() . "\n";
+    echo "$json_string\n";
     exit(1);
 }
 
