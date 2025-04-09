@@ -83,7 +83,6 @@ $response = $client->chat()->create([
 $json_string = $response->choices[0]->message->content;
 $json = json_decode($json_string, true);
 if (json_last_error() !== JSON_ERROR_NONE) {
-    echo "JSONのパースに失敗しました: " . json_last_error_msg() . "\n";
     echo "$json_string\n";
     exit(1);
 }
