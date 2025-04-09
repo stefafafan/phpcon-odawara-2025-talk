@@ -24,7 +24,7 @@ function parseLine(array $parsed, int $limit, int $index): array
         $count += mb_strlen($current);
         // ャュョについては直前の音にくっつくため、その分音数を減らす
         $count -= preg_match_all('/[ャュョ]/u', $current);
-        $original .= $parsed[$index]->feature[6];
+        $original .= $parsed[$index]->surface;
         $yomi .= $parsed[$index]->feature[8];
         $index++;
     }
