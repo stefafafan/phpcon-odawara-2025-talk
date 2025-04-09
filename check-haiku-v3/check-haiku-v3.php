@@ -63,7 +63,8 @@ function describeHaiku(mixed $json): string
 
     return "上五: {$kamigo['text']} (読み: {$kamigo['yomi']}) ({$kamigo['count']}音)\n" .
         "中七: {$nakashichi['text']} (読み: {$nakashichi['yomi']}) ({$nakashichi['count']}音)\n" .
-        "下五: {$shimogo['text']} (読み: {$shimogo['yomi']}) ({$shimogo['count']}音)\n";
+        "下五: {$shimogo['text']} (読み: {$shimogo['yomi']}) ({$shimogo['count']}音)\n" .
+        "合計: {$json['total_count']}音\n";
 }
 
 $stdin = fopen("php://stdin", "r");
