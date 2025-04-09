@@ -30,7 +30,7 @@ php ./check-haiku-v3.php
 - Expected: 俳句
 - Received: 俳句
 
-漢字を含んでいても正しくパースしてくれるようになりました。
+漢字を含んでいても正しくパースしてくれます。
 
 ```sh
 php ./check-haiku-v3.php
