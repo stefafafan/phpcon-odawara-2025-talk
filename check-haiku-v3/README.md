@@ -74,7 +74,7 @@ php ./check-haiku-v3.php
 これは俳句ではありません。
 ```
 
-### :?: 十七文字の文章を作る
+### :question: 十七文字の文章を作る
 
 - Expected: Not 俳句
 - Received: 確率的にパース失敗
