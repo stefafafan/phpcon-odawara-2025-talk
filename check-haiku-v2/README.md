@@ -119,12 +119,16 @@ php ./check-haiku-v2.php
 ### :x: 使いたいPHP判定に
 
 - Expected: 俳句
-- Received: Crash
+- Received: Not 俳句
 
-「PHP」という単語の発音を取得できず、クラッシュしてしまいました。
+「PHP」という単語の発音を取得できず、文字数カウントが失敗します。
 
 ```sh
-php ./check-haiku-v2.php
 使いたいPHPを判定に
-PHP Warning:  Undefined array key 8 in /Users/stefafafan/ghq/github.com/stefafafan/phpcon-odawara-2025-talk/check-haiku-v2/check-haiku-v2.php on line 23
+上五: 使いたい (読み: ツカイタイ) (5音)
+中七: PHPを判定 (読み: PHPヲハンテイ) (8音)
+下五: に (読み: ニ) (1音)
+合計: 14音
+
+これは俳句ではありません。
 ```
