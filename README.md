@@ -29,7 +29,7 @@ $ php ./check-haiku-v1.php
 ## 2. [logue/igo-php](https://github.com/logue/igo-php) を利用した形態素解析による俳句の判定
 
 形態素解析をすることで、漢字の読みは文章の区切り目を判別し俳句の判定をします。  
-しかし「PHP」など辞書に読みが存在しない単語を使う場合は上手く動作しません。
+しかし辞書に読みが存在しない単語を使う場合は上手く動作しません(「PHP」に関しては読みをハードコードしてあります)。
 
 ```sh
 $ cd check-haiku-v2
@@ -41,13 +41,6 @@ $ php ./check-haiku-v2.php
 合計: 17音
 
 これは俳句です。
-```
-
-```sh
-$ cd check-haiku-v2
-$ php ./check-haiku-v2.php
-使いたいPHPを判定に
-PHP Warning:  Undefined array key 8 in /Users/stefafafan/ghq/github.com/stefafafan/phpcon-odawara-2025-talk/check-haiku-v2/check-haiku-v2.php on line 23
 ```
 
 詳しくは [check-haiku-v2のREADME](./check-haiku-v2/README.md)をご覧ください。
