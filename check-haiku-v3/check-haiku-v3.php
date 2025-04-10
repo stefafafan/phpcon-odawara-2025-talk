@@ -71,7 +71,7 @@ function describeHaiku(mixed $json): string
 $stdin = fopen("php://stdin", "r");
 $input = fgets($stdin);
 fclose($stdin);
-$input = str_replace(['　', ''], '', mb_trim($input));
+$input = str_replace(['　', ' '], '', mb_trim($input));
 
 $response = $client->chat()->create([
     'model' => 'gpt-4o',
