@@ -69,7 +69,7 @@ function describeHaiku(string $input): string
 $stdin = fopen("php://stdin", "r");
 $input = fgets($stdin);
 fclose($stdin);
-$input = trim($input);
+$input = str_replace(['　', ''], '', mb_trim($input));
 
 echo describeHaiku($input) . "\n";
 if (isHaiku($input)) {
