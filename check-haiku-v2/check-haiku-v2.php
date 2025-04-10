@@ -7,6 +7,11 @@ const KAMIGO_LEN = 5;
 const NAKASHICHI_LEN = 7;
 const SHIMOGO_LEN = 5;
 
+// PHPのような辞書に読みが登録されていない単語の読みを指定する。
+const specialWords = [
+    'PHP' => 'ピーエイチピー',
+];
+
 // 形態素解析済みの配列を受け取り、指定されたindexからlimitまでの文字列や読みを取得する。
 // 上五、中七、下五の文字列と読みを取得するために使用される。
 // 注意: $index を書き換えて返す。
@@ -21,6 +26,10 @@ function parseLine(array $parsed, int $limit, int $index): array
             break;
         }
         $current = isset($parsed[$index]->feature[8]) ? $parsed[$index]->feature[8] : $parsed[$index]->surface;
+        // 特殊な単語は読みを置き換える
+        if (array_key_exists($current, specialWords)) {
+            $current = specialWords[$current];
+        }
         $count += mb_strlen($current);
         // ャュョについては直前の音にくっつくため、その分音数を減らす
         $count -= preg_match_all('/[ャュョ]/u', $current);
