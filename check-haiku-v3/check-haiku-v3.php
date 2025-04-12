@@ -69,9 +69,18 @@ function describeHaiku(mixed $json): string
 }
 
 $stdin = fopen("php://stdin", "r");
+if ($stdin === false) {
+    echo "標準入力を開けませんでした\n";
+    exit(1);
+}
 $input = fgets($stdin);
-fclose($stdin);
+if ($input === false) {
+    echo "標準入力からの読み込みに失敗しました\n";
+    fclose($stdin);
+    exit(1);
+}
 $input = str_replace(['　', ' '], '', mb_trim($input));
+fclose($stdin);
 
 $response = $client->chat()->create([
     'model' => 'gpt-4o',
@@ -82,6 +91,10 @@ $response = $client->chat()->create([
 ]);
 
 $json_string = $response->choices[0]->message->content;
+if ($json_string === null) {
+    echo "APIからの応答がありませんでした\n";
+    exit(1);
+}
 $json = json_decode($json_string, true);
 if (json_last_error() !== JSON_ERROR_NONE) {
     echo "$json_string\n";
