@@ -12,9 +12,20 @@ const specialWords = [
     'PHP' => 'ピーエイチピー',
 ];
 
-// 形態素解析済みの配列を受け取り、指定されたindexからlimitまでの文字列や読みを取得する。
-// 上五、中七、下五の文字列と読みを取得するために使用される。
-// 注意: $index を書き換えて返す。
+/**
+ * 形態素解析済みの配列を受け取り、指定されたindexからlimitまでの文字列や読みを取得する。
+ * 上五、中七、下五の文字列と読みを取得するために使用される。
+ * 注意: $index を書き換えて返す。
+ * @param array<mixed> $parsed
+ * @param int $limit
+ * @param int $index
+ * @return array{
+ *    count: int,
+ *   original: string,
+ *   yomi: string,
+ *  index: int
+ * }
+ */
 function parseLine(array $parsed, int $limit, int $index): array
 {
     $count = 0;
@@ -46,6 +57,11 @@ function parseLine(array $parsed, int $limit, int $index): array
     ];
 }
 
+/**
+ * 俳句かどうかを判定する関数
+ * @param string $input
+ * @return bool
+ */
 function isHaiku(string $input): bool
 {
     $igo = new Igo\Tagger();
@@ -58,6 +74,11 @@ function isHaiku(string $input): bool
     return $kamigo['count'] === KAMIGO_LEN && $nakashichi['count'] === NAKASHICHI_LEN && $shimogo['count'] === SHIMOGO_LEN;
 }
 
+/**
+ * 俳句の説明を生成する関数
+ * @param string $input
+ * @return string
+ */
 function describeHaiku(string $input): string
 {
     $igo = new Igo\Tagger();
@@ -76,9 +97,18 @@ function describeHaiku(string $input): string
 }
 
 $stdin = fopen("php://stdin", "r");
+if ($stdin === false) {
+    echo "標準入力を開けませんでした\n";
+    exit(1);
+}
 $input = fgets($stdin);
-fclose($stdin);
+if ($input === false) {
+    echo "標準入力からの読み込みに失敗しました\n";
+    fclose($stdin);
+    exit(1);
+}
 $input = str_replace(['　', ' '], '', mb_trim($input));
+fclose($stdin);
 
 echo describeHaiku($input) . "\n";
 if (isHaiku($input)) {

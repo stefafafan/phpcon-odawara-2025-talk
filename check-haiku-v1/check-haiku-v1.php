@@ -24,9 +24,18 @@ function describeHaiku(string $input): string
 }
 
 $stdin = fopen("php://stdin", "r");
+if ($stdin === false) {
+    echo "標準入力を開けませんでした\n";
+    exit(1);
+}
 $input = fgets($stdin);
-fclose($stdin);
+if ($input === false) {
+    echo "標準入力からの読み込みに失敗しました\n";
+    fclose($stdin);
+    exit(1);
+}
 $input = str_replace(['　', ' '], '', mb_trim($input));
+fclose($stdin);
 
 echo describeHaiku($input) . "\n";
 if (isHaiku($input)) {

@@ -8,5 +8,8 @@
         "allow-plugins": {
             "php-http/discovery": true
         }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1"
     }
 }
