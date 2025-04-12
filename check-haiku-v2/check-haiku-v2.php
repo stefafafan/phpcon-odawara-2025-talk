@@ -20,9 +20,9 @@ const specialWords = [
  * @param int $limit
  * @param int $index
  * @return array{
- *    count: int,
- *   original: string,
- *   yomi: string,
+ *  count: int,
+ *  original: string,
+ *  yomi: string,
  *  index: int
  * }
  */
